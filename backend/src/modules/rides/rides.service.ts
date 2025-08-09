@@ -64,11 +64,20 @@ export const ridesService = {
 
   async acceptRide(rideId: string, data: unknown) {
     const { driverId } = acceptRideSchema.parse(data);
-    const ride = await prisma.ride.update({
+
+    const ride = await prisma.ride.findUnique({ where: { id: rideId } });
+    if (!ride) {
+      throw new Error('Ride not found');
+    }
+    if (ride.status !== 'REQUESTED') {
+      throw new Error('Ride status is not REQUESTED');
+    }
+
+    const updatedRide = await prisma.ride.update({
       where: { id: rideId },
       data: { driverId, status: 'ACCEPTED' },
     });
-    return ride;
+    return updatedRide;
   },
 
   async updateRideStatus(rideId: string, data: unknown) {
