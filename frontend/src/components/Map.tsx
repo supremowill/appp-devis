@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { initMap } from '../lib/mapbox';
 
@@ -10,14 +10,14 @@ const Map = ({ driverLocations }: MapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<{ [key: string]: mapboxgl.Marker }>({});
-  const [lng, setLng] = useState(-46.6333);
-  const [lat, setLat] = useState(-23.5505);
-  const [zoom, setZoom] = useState(12);
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return; // initialize map only once
+    const lng = -46.6333;
+    const lat = -23.5505;
+    const zoom = 12;
     map.current = initMap(mapContainer.current.id, [lng, lat], zoom);
-  });
+  }, []);
 
   useEffect(() => {
     if (!map.current || !driverLocations) return;
