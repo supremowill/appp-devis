@@ -1,7 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
+import axios from 'axios';
 
 const prisma = new PrismaClient();
+
+const MAPBOX_DIRECTIONS_API_BASE_URL = 'https://api.mapbox.com/directions/v5/mapbox/driving';
+const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
+const BASE_PRICE_PER_KM = 2.5; // R$ 2.50 por km
+const BASE_FARE = 5.0; // R$ 5.00 de taxa fixa
 
 const createRideSchema = z.object({
   passengerId: z.string(),
@@ -29,7 +35,30 @@ const updateStatusSchema = z.object({
 export const ridesService = {
   async createRide(data: unknown) {
     const validatedData = createRideSchema.parse(data);
-    const ride = await prisma.ride.create({ data: validatedData });
+
+    // Get distance and duration from Mapbox Directions API
+    const url = `${MAPBOX_DIRECTIONS_API_BASE_URL}/${validatedData.originLng},${validatedData.originLat};${validatedData.destLng},${validatedData.destLat}`;
+    const response = await axios.get(url, {
+      params: {
+        geometries: 'geojson',
+        access_token: MAPBOX_TOKEN,
+      },
+    });
+
+    const route = response.data.routes[0];
+    const distanceKm = route.distance / 1000; // meters to kilometers
+    const durationMin = route.duration / 60; // seconds to minutes
+
+    const price = (distanceKm * BASE_PRICE_PER_KM) + BASE_FARE;
+
+    const ride = await prisma.ride.create({
+      data: {
+        ...validatedData,
+        distanceKm,
+        durationMin,
+        price,
+      },
+    });
     return ride;
   },
 

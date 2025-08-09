@@ -14,9 +14,9 @@ O projeto é um monorepo dividido em:
 -   [x] Cadastro e Login de Passageiros e Motoristas
 -   [x] Mapa interativo com Mapbox para visualização e seleção de rotas
 -   [x] Solicitação e aceite de corridas (básico)
--   [ ] Cálculo de preço baseado na distância
--   [ ] Atualização de status da corrida em tempo real com Socket.io
--   [ ] Acompanhamento do motorista no mapa
+-   [x] Cálculo de preço baseado na distância (básico)
+-   [x] Atualização de status da corrida em tempo real com Socket.io
+-   [x] Acompanhamento do motorista no mapa
 
 ---
 

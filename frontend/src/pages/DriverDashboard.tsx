@@ -15,6 +15,26 @@ const DriverDashboard = () => {
 
     socket.on('connect', () => {
       console.log('Conectado ao socket!');
+
+      // Emit driver location every 5 seconds
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          socket.emit('driver:location', {
+            driverId: 'DRIVER_ID_PLACEHOLDER', // Replace with actual driver ID
+            lat: latitude,
+            lng: longitude,
+          });
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+        },
+        { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+      );
+
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+      };
     });
 
     socket.on('ride:requested', (ride) => {

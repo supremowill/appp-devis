@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import Map from '../components/Map';
 import RideForm from '../components/RideForm';
 
 const PassengerDashboard = () => {
+  const [driverLocations, setDriverLocations] = useState<{ [key: string]: { lat: number; lng: number } }>({});
+
   useEffect(() => {
     const socket = io(`${import.meta.env.VITE_API_BASE_URL}/rides`, {
       auth: {
@@ -25,6 +27,13 @@ const PassengerDashboard = () => {
       // Lógica para atualizar o status da corrida
     });
 
+    socket.on('driver:location', (data: { driverId: string; lat: number; lng: number }) => {
+      setDriverLocations((prevLocations) => ({
+        ...prevLocations,
+        [data.driverId]: { lat: data.lat, lng: data.lng },
+      }));
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -32,7 +41,7 @@ const PassengerDashboard = () => {
 
   return (
     <div className="h-screen w-screen">
-      <Map />
+      <Map driverLocations={driverLocations} />
       <RideForm />
     </div>
   );
