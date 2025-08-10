@@ -26,7 +26,7 @@ model User {
   email     String   @unique
   phone     String?
   password  String
-  role      Role
+  role      Role    @default(PASSENGER)
   carModel  String?  // para DRIVER
   carPlate  String?  // para DRIVER
   cnh       String?  // para DRIVER

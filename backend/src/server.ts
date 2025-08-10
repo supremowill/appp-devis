@@ -1,6 +1,11 @@
+import 'dotenv/config';
 import http from 'http';
 import { Server } from 'socket.io';
 import app from './app';
+
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL not set. Create backend/.env (copy from .env.example).');
+}
 
 const port = process.env.PORT || 3001;
 

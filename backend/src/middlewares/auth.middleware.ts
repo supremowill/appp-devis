@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { Role } from '@prisma/client';
+import { $Enums } from '@prisma/client';
 
 export interface UserPayload {
   id: string;
-  role: Role;
+  role: $Enums.Role;
 }
 
 declare global {
