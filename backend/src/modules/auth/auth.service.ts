@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient, $Enums } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
@@ -9,7 +9,7 @@ const registerSchema = z.object({
   name: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.nativeEnum(Role),
+  role: z.nativeEnum($Enums.Role),
   phone: z.string().optional(),
   carModel: z.string().optional(),
   carPlate: z.string().optional(),
