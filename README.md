@@ -6,29 +6,37 @@ Este é um projeto full-stack de um aplicativo de mobilidade urbana, similar ao 
 
 O projeto é um monorepo dividido em:
 
--   `/frontend`: Aplicação React (Vite) com TypeScript e TailwindCSS para a interface do passageiro e do motorista.
+-   `/frontend`: Aplicação React PWA (Vite) com TypeScript e TailwindCSS para a interface do passageiro.
 -   `/backend`: API RESTful com Node.js, Express, e Prisma ORM para gerenciar usuários, corridas e comunicação em tempo real.
 
-## ✨ Funcionalidades
+## ✨ Funcionalidades do Frontend
 
--   [x] Cadastro e Login de Passageiros e Motoristas
--   [x] Mapa interativo com Mapbox para visualização e seleção de rotas
--   [x] Solicitação e aceite de corridas (básico)
--   [x] Cálculo de preço baseado na distância (básico)
--   [x] Atualização de status da corrida em tempo real com Socket.io
--   [x] Acompanhamento do motorista no mapa
-
----
+-   [x] **PWA (Progressive Web App)** - Instalável e funciona offline
+-   [x] **Mobile-First Design** - Otimizado para dispositivos móveis (375-430px)
+-   [x] **Tela Splash/Home** - Mapa de fundo com pin de táxi e CTA
+-   [x] **Buscar Corrida** - Inputs From/To com autocomplete e mapa interativo
+-   [x] **Estimativa de Preço** - Cálculo automático baseado na rota
+-   [x] **Avaliar Motorista** - Sistema de avaliação com estrelas e comentários
+-   [x] **Tema Azul/Amarelo** - Design baseado no mock fornecido
+-   [x] **Integração com Backend** - Consumo de APIs REST
+-   [x] **Mapbox Integration** - Mapas interativos e geocoding
 
 ## 🛠️ Tecnologias Utilizadas
 
--   **Frontend**: React, Vite, TypeScript, TailwindCSS, Mapbox GL JS
--   **Backend**: Node.js, Express, TypeScript, Prisma, PostgreSQL
--   **Tempo Real**: Socket.io
--   **Autenticação**: JWT + bcrypt
--   **Qualidade**: ESLint, Prettier, Husky
--   **CI/CD**: GitHub Actions
--   **Hospedagem**: Vercel (Frontend), Railway (Backend)
+### Frontend
+-   **React 19** + **Vite** + **TypeScript**
+-   **TailwindCSS** - Estilização utilitária
+-   **React Router** - Roteamento SPA
+-   **Zustand** - Gerenciamento de estado
+-   **Mapbox GL JS** - Mapas interativos
+-   **Vite PWA Plugin** - Funcionalidades PWA
+-   **Lucide React** - Ícones
+
+### Backend (Existente)
+-   **Node.js** + **Express** + **TypeScript**
+-   **Prisma ORM** + **PostgreSQL**
+-   **Socket.io** - Tempo real
+-   **JWT** + **bcrypt** - Autenticação
 
 ---
 
@@ -38,10 +46,8 @@ O projeto é um monorepo dividido em:
 
 -   Node.js (v18+)
 -   NPM ou Yarn
--   Docker (para rodar o PostgreSQL localmente)
--   Uma conta no [Mapbox](https://www.mapbox.com/) para obter o token de acesso.
--   Uma conta no [Railway](https://railway.app/) para o deploy do backend e banco.
--   Uma conta na [Vercel](https://vercel.com/) para o deploy do frontend.
+-   Uma conta no [Mapbox](https://www.mapbox.com/) para obter o token de acesso
+-   Backend rodando (veja instruções na seção backend)
 
 ### 1. Clonar o Repositório
 
@@ -52,111 +58,207 @@ cd <NOME_DO_REPOSITORIO>
 
 ### 2. Configurar Variáveis de Ambiente
 
-Existem dois arquivos de exemplo `.env.example`, um em `/frontend` e outro em `/backend`. Renomeie-os para `.env` e preencha as variáveis necessárias.
+Copie o arquivo `.env.example` para `.env` no diretório `/frontend`:
 
-**Backend (`/backend/.env`):**
-
-```ini
-# URL de conexão do seu banco de dados PostgreSQL
-DATABASE_URL="postgresql://user:password@host:port/database"
-
-# Chave secreta para assinar os tokens JWT
-JWT_SECRET="SUA_CHAVE_SECRETA_AQUI"
-
-# Token de acesso do Mapbox (usado no backend para APIs seguras)
-MAPBOX_TOKEN="pk.SEU_TOKEN_MAPBOX_AQUI"
-
-# Porta em que o servidor irá rodar
-PORT=3001
+```bash
+cd frontend
+cp .env.example .env
 ```
 
 **Frontend (`/frontend/.env`):**
 
 ```ini
-# Token de acesso do Mapbox (usado no frontend para renderizar o mapa)
-VITE_MAPBOX_TOKEN="pk.SEU_TOKEN_MAPBOX_AQUI"
-
 # URL base da sua API backend
-VITE_API_BASE_URL="http://localhost:3001"
+VITE_API_URL=http://localhost:3001
+
+# Token de acesso do Mapbox (usado no frontend para renderizar o mapa)
+VITE_MAPBOX_TOKEN=pk.SEU_TOKEN_MAPBOX_AQUI
 ```
 
 ### 3. Instalar Dependências
 
-Execute o comando abaixo na raiz do projeto para instalar as dependências do frontend e do backend.
-
 ```bash
-npm install --prefix frontend && npm install --prefix backend
+cd frontend
+npm install
 ```
 
-### 4. Rodar as Migrations do Banco
-
-Com o backend configurado, rode as migrations do Prisma para criar as tabelas no banco de dados.
+### 4. Executar o Frontend
 
 ```bash
-npm run prisma:migrate --prefix backend
-```
-
----
-
-## 🚀 Executando Localmente
-
-Você pode rodar os dois ambientes (frontend e backend) simultaneamente.
-
-**Para iniciar o backend (API):**
-
-```bash
-npm run dev --prefix backend
-# O servidor estará rodando em http://localhost:3001
-```
-
-**Para iniciar o frontend (App):**
-
-```bash
-npm run dev --prefix frontend
+npm run dev
 # O app estará disponível em http://localhost:5173
 ```
 
 ---
 
-## 🧪 Scripts Disponíveis
-
-Cada pacote (`frontend` e `backend`) possui seus próprios scripts.
-
-### Backend
-
--   `npm run dev`: Inicia o servidor em modo de desenvolvimento.
--   `npm run build`: Compila o código TypeScript para JavaScript.
--   `npm run start`: Inicia o servidor em modo de produção (após o build).
--   `npm run lint`: Executa o linter.
--   `npm run test`: Roda os testes.
--   `npm run prisma:generate`: Gera o cliente Prisma.
--   `npm run prisma:migrate`: Aplica as migrations do banco.
+## 🚀 Scripts Disponíveis
 
 ### Frontend
 
--   `npm run dev`: Inicia o servidor de desenvolvimento Vite.
--   `npm run build`: Gera a build de produção.
--   `npm run preview`: Visualiza a build de produção localmente.
--   `npm run lint`: Executa o linter.
--   `npm run test`: Roda os testes.
+-   `npm run dev`: Inicia o servidor de desenvolvimento Vite
+-   `npm run build`: Gera a build de produção
+-   `npm run preview`: Visualiza a build de produção localmente
+-   `npm run lint`: Executa o linter
+
+---
+
+## 📱 Funcionalidades PWA
+
+O frontend é uma Progressive Web App (PWA) completa com:
+
+-   **Instalável**: Pode ser instalada como app nativo
+-   **Offline**: Cache básico para funcionar sem internet
+-   **Manifest**: Configuração completa para instalação
+-   **Service Worker**: Gerenciamento automático de cache
+-   **Ícones**: Ícones 192x192 e 512x512 para diferentes dispositivos
+
+---
+
+## 🎨 Design System
+
+### Paleta de Cores
+-   **Primária**: `#0A4AA6` (Azul principal)
+-   **Secundária**: `#FFD200` (Amarelo CTA)
+-   **Azul Médio**: `#0E64D2`
+-   **Fundo Claro**: `#E6F0F8`
+-   **Texto Primário**: `#0A2342`
+-   **Texto Secundário**: `#6B7280`
+
+### Tipografia
+-   **Fonte**: Inter (Google Fonts)
+-   **Pesos**: 400, 500, 600, 700
+
+### Componentes
+-   **Botões**: Bordas arredondadas (rounded-2xl), estados hover/active
+-   **Inputs**: Foco com ring azul, placeholders claros
+-   **Cards**: Sombras suaves, cantos arredondados
+-   **Mapas**: Integração completa com Mapbox GL JS
+
+---
+
+## 🔌 Integração com Backend
+
+O frontend consome as seguintes APIs do backend:
+
+### Endpoints Utilizados
+
+-   `POST /map/geocode` - Busca de endereços
+-   `POST /map/route` - Cálculo de rotas
+-   `POST /rides/estimate` - Estimativa de preço
+-   `POST /rides` - Criação de corridas
+-   `GET /drivers/:id` - Dados do motorista
+-   `POST /drivers/:id/rate` - Avaliação do motorista
+
+### Adaptadores
+
+Todos os endpoints são consumidos através de adaptadores em `/src/api/`, permitindo fácil manutenção e modificação dos contratos.
+
+---
+
+## 📱 Telas
+
+### 1. Splash/Home (`/`)
+-   Mapa de fundo com pin de táxi animado
+-   Botão "Buscar Corrida"
+-   Footer com dots e "DEVELOPED BY"
+
+### 2. Buscar Corrida (`/ride`)
+-   Inputs "From" e "To" com autocomplete
+-   Mapa interativo com marcadores
+-   Chips A/B/C para locais sugeridos
+-   Estimativa de distância, tempo e preço
+-   Botão "PICK ME"
+
+### 3. Avaliar Motorista (`/rate`)
+-   Card azul com avatar do motorista
+-   Sistema de 5 estrelas interativo
+-   Campo de comentário opcional
+-   Botão "RATE DRIVER"
+
+---
+
+## 🧪 Testes e Desenvolvimento
+
+### Testando Localmente
+
+1. **Geocoding**: Digite "Avenida Brasil, Maringá" no campo From/To
+2. **Rota**: Selecione origem e destino para ver a rota no mapa
+3. **Estimativa**: Preço calculado automaticamente
+4. **Avaliação**: Teste com dados mock do motorista
+
+### Fallbacks
+
+-   **Mapbox indisponível**: Mostra mapa placeholder
+-   **API offline**: Exibe mensagens de erro apropriadas
+-   **Dados mock**: Driver demo para testes de avaliação
 
 ---
 
 ## 🚀 Deploy
 
-### Backend (Railway)
-
-1.  Crie um novo projeto no Railway e conecte seu repositório GitHub.
-2.  Adicione um banco de dados PostgreSQL.
-3.  Nas configurações do serviço do seu backend, adicione as variáveis de ambiente (`DATABASE_URL`, `JWT_SECRET`, `MAPBOX_TOKEN`, `PORT`). A `DATABASE_URL` será fornecida pelo próprio Railway.
-4.  O Railway detectará o `Dockerfile` (se houver) ou o `package.json` e fará o deploy automaticamente.
-
 ### Frontend (Vercel)
 
-1.  Crie um novo projeto na Vercel e conecte seu repositório GitHub.
-2.  Selecione o diretório `frontend` como a raiz do projeto.
-3.  A Vercel detectará que é um projeto Vite e configurará o build automaticamente.
-4.  Adicione as variáveis de ambiente:
-    -   `VITE_MAPBOX_TOKEN`: seu token público do Mapbox.
-    -   `VITE_API_BASE_URL`: a URL pública do seu backend no Railway.
-5.  Faça o deploy.
+1. Conecte seu repositório GitHub à Vercel
+2. Configure as variáveis de ambiente:
+   -   `VITE_API_URL`: URL do seu backend em produção
+   -   `VITE_MAPBOX_TOKEN`: Token público do Mapbox
+3. Deploy automático a cada push
+
+### PWA
+
+A build de produção gera automaticamente:
+-   Service Worker para cache
+-   Manifest.json para instalação
+-   Ícones otimizados
+
+---
+
+## 🔧 Estrutura do Projeto
+
+```
+frontend/
+├── public/
+│   ├── manifest.webmanifest
+│   └── icons/
+├── src/
+│   ├── api/              # Adaptadores para backend
+│   ├── components/       # Componentes reutilizáveis
+│   ├── pages/           # Páginas da aplicação
+│   ├── store/           # Gerenciamento de estado (Zustand)
+│   ├── lib/             # Utilitários (Mapbox)
+│   ├── types/           # Tipos TypeScript
+│   ├── utils/           # Funções utilitárias
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── styles.css
+├── .env.example
+├── vite.config.ts
+├── tailwind.config.js
+└── package.json
+```
+
+---
+
+## 📝 Notas Importantes
+
+-   **Backend Intacto**: O frontend apenas consome APIs, sem modificar o backend
+-   **Adaptadores**: Se os endpoints retornarem dados diferentes, os adaptadores mapeiam automaticamente
+-   **Mobile-First**: Otimizado para 375-430px, mas responsivo até desktop
+-   **Acessibilidade**: Labels, ARIA, contraste adequado
+-   **Performance**: Lazy loading, debounced geocoding, cache PWA
+
+---
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
