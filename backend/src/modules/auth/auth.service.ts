@@ -1,7 +1,13 @@
-import { PrismaClient, $Enums } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
+
+// Define Role enum locally to avoid Prisma client dependency during build
+enum Role {
+  DRIVER = 'DRIVER',
+  PASSENGER = 'PASSENGER'
+}
 
 const prisma = new PrismaClient();
 
@@ -9,7 +15,7 @@ const registerSchema = z.object({
   name: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.nativeEnum($Enums.Role),
+  role: z.nativeEnum(Role),
   phone: z.string().optional(),
   carModel: z.string().optional(),
   carPlate: z.string().optional(),

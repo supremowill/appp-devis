@@ -1,10 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { $Enums } from '@prisma/client';
+
+// Define Role enum locally to avoid Prisma client dependency during build
+export enum Role {
+  DRIVER = 'DRIVER',
+  PASSENGER = 'PASSENGER'
+}
 
 export interface UserPayload {
   id: string;
-  role: $Enums.Role;
+  role: Role;
 }
 
 declare global {
